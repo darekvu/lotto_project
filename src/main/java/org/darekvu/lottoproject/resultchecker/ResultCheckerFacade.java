@@ -17,30 +17,30 @@ public class ResultCheckerFacade {
 
     private final NumberReceiverFacade numberReceiverFacade;
     private final WinningNumbersGeneratorFacade winningNumbersGeneratorFacade;
-    private final WinnerGenerator winnerGenerator;
+    private final WinnerRetriever winnerRetriever;
     private final PlayerRepository playerRepository;
 
 
-    PlayersDto generateWinners() {
+    public PlayersDto generateWinners() {
         LocalDateTime drawDate = numberReceiverFacade.generateClosestDrawDate();
         List<TicketDto> allTicketsByDate = numberReceiverFacade.retrieveTicketsByDrawDate(drawDate);
         Set<Ticket> tickets = ResultCheckerMapper.mapTicketDtoToTicket(allTicketsByDate);
         WinningNumbersDto winningNumbersDto = winningNumbersGeneratorFacade.generateWinningNumbers();
         Set<Integer> winningNumbers = winningNumbersDto.winningNumbers();
-        List<Player> players = winnerGenerator.retrieveWinners(tickets, winningNumbers);
+        List<Player> players = winnerRetriever.retrievePlayers(tickets, winningNumbers);
         if (winningNumbers == null || winningNumbers.isEmpty()) {
             return PlayersDto.builder()
-                    .message("failed to retrieve winners")
+                    .message("failed to retrieve players")
                     .build();
         }
         playerRepository.saveAll(players);
         return PlayersDto.builder()
                 .results(ResultCheckerMapper.mapPlayerToResults(players))
-                .message("successfully retrieved winners")
+                .message("successfully retrieved players")
                 .build();
     }
 
-    public ResultDto generateResults(String ticketId) {
+    public ResultDto findByTicketId(String ticketId) {
         Player player = playerRepository.findById(ticketId).orElseThrow(() -> new PlayerNotFoundException("player not found exception"));
         return ResultDto.builder()
                 .ticketId(ticketId)

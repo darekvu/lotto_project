@@ -23,6 +23,8 @@ public class NumberReceiverFacade {
             String message = validator.createErrorResponseMessage();
             return new InputNumberResponseDto(null, message);
         }
+
+
         LocalDateTime drawDate = drawDateGenerator.generateDrawDate();
         String ticketId = ticketIdGenerator.generateUniqueId();
         TicketDto generatedTicket = TicketDto.builder()

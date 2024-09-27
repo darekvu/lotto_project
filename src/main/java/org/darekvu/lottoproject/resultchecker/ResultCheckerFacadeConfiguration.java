@@ -5,7 +5,7 @@ import org.darekvu.lottoproject.numberreceiver.NumberReceiverFacade;
 
 public class ResultCheckerFacadeConfiguration {
     public ResultCheckerFacade createForTest(NumberReceiverFacade numberReceiverFacade, WinningNumbersGeneratorFacade winningNumbersGeneratorFacade, PlayerRepository playerRepository) {
-        WinnerGenerator winnerGenerator = new WinnerGenerator();
-        return new ResultCheckerFacade(numberReceiverFacade, winningNumbersGeneratorFacade, winnerGenerator, playerRepository);
+        WinnerRetriever winnerRetriever = new WinnerRetriever();
+        return new ResultCheckerFacade(numberReceiverFacade, winningNumbersGeneratorFacade, winnerRetriever, playerRepository);
     }
 }

@@ -112,7 +112,7 @@ class ResultCheckerFacadeTest {
                         .build())
         );
         resultCheckerFacade.generateWinners();
-        ResultDto resultDto = resultCheckerFacade.generateResults(ticketId);
+        ResultDto resultDto = resultCheckerFacade.findByTicketId(ticketId);
         //when
         ResultDto expectedResult = ResultDto.builder()
                 .ticketId(ticketId)
