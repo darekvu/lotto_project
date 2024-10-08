@@ -62,7 +62,7 @@ class ResultCheckerFacadeTest {
         PlayersDto playersDto = resultCheckerFacade.generateWinners();
         String message = playersDto.message();
         //then
-        assertThat(message).isEqualTo("successfully retrieved winners");
+        assertThat(message).isEqualTo("successfully retrieved players");
     }
 
     @Test
@@ -79,7 +79,7 @@ class ResultCheckerFacadeTest {
 
         String message = playersDto.message();
         //then
-        assertThat(message).isEqualTo("failed to retrieve winners");
+        assertThat(message).isEqualTo("failed to retrieve players");
     }
 
     @Test

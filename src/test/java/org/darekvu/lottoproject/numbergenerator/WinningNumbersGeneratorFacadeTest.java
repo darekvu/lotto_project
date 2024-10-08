@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.random.RandomGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +29,18 @@ public class WinningNumbersGeneratorFacadeTest {
 
     InMemoryWinningNumbersRepositoryTestImpl winningNumbersRepo = new InMemoryWinningNumbersRepositoryTestImpl();
     WinningNumbersGeneratorTestImpl winningNumberGenerator = new WinningNumbersGeneratorTestImpl();
-
+    private final OneRandomNumberFetcher fetcher = new SecureOneRandomNumberFetcher();
+    @Test
+    public void it_should_return_set_of_required_size() {
+        //given
+        RandomNumberGenerable generator =  new RandomNumberGenerator(fetcher);
+        when(numberReceiverFacade.generateClosestDrawDate()).thenReturn(LocalDateTime.now());
+        WinningNumbersGeneratorFacade numbersGenerator = new NumbersGeneratorFacadeConfiguration().createForTest(winningNumbersRepo, numberReceiverFacade, generator);
+        //when
+        WinningNumbersDto generatedNumbers = numbersGenerator.generateWinningNumbers();
+        //then
+        assertThat(generatedNumbers.winningNumbers()).hasSize(6);
+    }
     @Test
     void it_should_return_6_winning_numbers() {
         //given
